@@ -1,28 +1,39 @@
+// Jeremy Yon 2019 g00330435
+// Secure Hash Algorithm, 256 bit version
+// https://ws680.nist.gov/publication/get_pdf.cfm?pub_id=910977
+
+
+// the usual input/output file header
 #include <stdio.h>
-#include <math.h>
+// For using fixed bit length integers.
 #include <stdint.h>
 
-uint32_t primes[] = {
-  2,   3,   5,   7,  11,  13,  17,  19,  23,
- 29,  31,  37,  41,  43,  47,  53,  59,  61, 
- 67,  71,  73,  79,  83,  89,  97, 101, 103, 
-107, 109, 113, 127, 131, 137, 139, 149, 151, 
-157, 163, 167, 173, 179, 181, 191, 193, 197, 
-199, 211, 223, 227, 229, 233,	239, 241, 251,	
-257, 263, 269, 271, 277, 281, 283, 293, 307,	311 };
+void sha256();
 
-int main(int argc, char *argv[]) {
-   long double cuberoot;
-   long double fraction;
-   long double multiply;
-
-   for(int i = 0; i<64; i++){
-      cuberoot = cbrtl((long double) primes[i]);
-      fraction = cuberoot - floorl(cuberoot);
-      multiply = fraction * 0x100000000;
-      multiply = floorl(multiply);
-      printf("%3d -> %3.6Lf -> %03.6f -> %08x\n", primes[i],cuberoot,fraction,(uint32_t) multiply);
-   }
+int main(int argc, char *argv[]){
 
    return 0;
+}
+
+void sha256(){
+
+   // message schedule (section 6.2)
+   uint32_t W[64];
+   // working variables (section 6.2)
+   uint32_t a,b,c,d,e,f,g,h;
+   // two temporary variables (section 6.2)
+   uint32_t T1,T2;
+
+   // the hash value (section 6.2)
+   // the values come from (section 5.3.3)
+   uint32_t H[8] = {
+      0x6a09e667,
+      0xbb67ae85,
+      0x3c6ef372,
+      0xa54ff53a,
+      0x510e527f,
+      0x9b05688c,
+      0x1f83d9ab,
+      0x5be0cd19
+   };
 }
