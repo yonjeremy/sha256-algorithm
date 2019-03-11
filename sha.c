@@ -18,6 +18,14 @@ uint32_t sig1(uint32_t x);
 uint32_t rotr(uint32_t n, uint32_t x);
 uint32_t shr(uint32_t n, uint32_t x);
 
+// see section4.1.2 for definitions
+uint32_t SIG0(uint32_t x);
+uint32_t SIG1(uint32_t x);
+
+// see section4.1.2 for definitions
+uint32_t Ch(uint32_t x, uint32_t y, uint32_t z);
+uint32_t Maj(uint32_t x, uint32_t y, uint32_t z);
+
 
 int main(int argc, char *argv[]){
 
@@ -109,4 +117,20 @@ uint32_t sig0(uint32_t x){
 uint32_t sig1(uint32_t x){
    // see section 3.2 and 4.1.2 for definitions
    return (rotr(17,x) ^ rotr(19,x) ^ shr(10,x));
+}
+
+// see section4.1.2 for definitions
+uint32_t SIG0(uint32_t x){
+
+}
+uint32_t SIG1(uint32_t x){
+
+}
+
+// see section4.1.2 for definitions
+uint32_t Ch(uint32_t x, uint32_t y, uint32_t z){
+   return (x & y) ^ ((!x) & z);
+}
+uint32_t Maj(uint32_t x, uint32_t y, uint32_t z){
+
 }
