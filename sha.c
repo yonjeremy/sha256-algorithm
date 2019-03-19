@@ -27,12 +27,12 @@ uint32_t Ch(uint32_t x, uint32_t y, uint32_t z);
 uint32_t Maj(uint32_t x, uint32_t y, uint32_t z);
 
 
-int main(int argc, char *argv[]){
+// int main(int argc, char *argv[]){
 
-   sha256();
+//    sha256();
 
-   return 0;
-}
+//    return 0;
+// }
 
 void sha256(){
 
@@ -82,50 +82,55 @@ void sha256(){
    // for looping
    int i,t;
 
-   // From page 22, W[t] = M[t] for 0 <= t <= 15
-   for(t=0; t<16; t++){
-      W[t] = M[t];
+   // loop through message box
+   for (i = 0; i<1; i++){
+
+      
+
+      // From page 22, W[t] = M[t] for 0 <= t <= 15
+      for(t=0; t<16; t++){
+         W[t] = M[t];
+      }
+
+      // From page 22, W[t] = ...
+      for(t=16; t<64; t++){
+         sig1(W[t-2]) + W[t-7] + sig0(W[t-15]) + W[t-16];
+      }
+
+      // initialise a,b,c,d,e,f,g,h as per step 2, page 22
+      a = H[0]; b = H[1]; c = H[2]; d = H[3]; 
+      e = H[4]; f = H[5]; g = H[6]; h = H[7];
+
+      // step 3
+      for (t = 0; t < 64; t++){
+         T1 = h + SIG1(e) + Ch(e,f,g) + K[t] + W[t];
+         T2 = SIG0(a) + Maj(a,b,c);
+         h = g;
+         g = f;
+         f = e;
+         e = d + T1;
+         d = c;
+         c = b;
+         b = a;
+         a = T1 + T2;
+      }
+
+      // step 4
+      H[0] = a + H[0];
+      H[1] = b + H[1];
+      H[2] = c + H[2];
+      H[3] = d + H[3];
+      H[4] = e + H[4];
+      H[5] = f + H[5];
+      H[6] = g + H[6];
+      H[7] = h + H[7];
+
    }
-
-   // From page 22, W[t] = ...
-   for(t=16; t<64; t++){
-      sig1(W[t-2]) + W[t-7] + sig0(W[t-15]) + W[t-16];
-   }
-
-   // initialise a,b,c,d,e,f,g,h as per step 2, page 22
-   a = H[0]; b = H[1]; c = H[2]; d = H[3]; 
-   e = H[4]; f = H[5]; g = H[6]; h = H[7];
-
-   // step 3
-   for (t = 0; t < 64; t++){
-      T1 = h + SIG1(e) + Ch(e,f,g) + K[t] + W[t];
-      T2 = SIG0(a) + Maj(a,b,c);
-      h = g;
-      g = f;
-      f = e;
-      e = d + T1;
-      d = c;
-      c = b;
-      b = a;
-      a = T1 + T2;
-   }
-
-   // step 4
-   H[0] = a + H[0];
-   H[1] = b + H[1];
-   H[2] = c + H[2];
-   H[3] = d + H[3];
-   H[4] = e + H[4];
-   H[5] = f + H[5];
-   H[6] = g + H[6];
-   H[7] = h + H[7];
-
-
    printf("%x %x %x %x %x %x %x %x ", H[0],H[1],H[2],H[3],H[4],H[5],H[6],H[7]);
 }
 
 uint32_t rotr(uint32_t n, uint32_t x){
-   return (x >> n) | (x << (32-n)) ;
+   return (x >> n) | (x << (32 - n)) ;
 }
 
 uint32_t shr(uint32_t n, uint32_t x){
@@ -156,4 +161,28 @@ uint32_t Ch(uint32_t x, uint32_t y, uint32_t z){
 }
 uint32_t Maj(uint32_t x, uint32_t y, uint32_t z){
    return ((x & y) ^ (x & z) ^ (y & z));
+}
+
+union msgblock {
+   uint8_t e[64];
+   uint32_t t[16];
+   uint64_t s[8];
+};
+
+int main(int args, char *argv[]){
+
+   union msgblock M;
+
+   uint64_t nobytes;
+
+   FILE* f;
+
+   f = fopen(argv[1], "r");
+   
+   while (!feof(f)){
+      nobytes = fread(M.e,1,64,f);
+      printf("%llu\n", nobytes);
+   }
+   fclose(f);
+   return 0;
 }
