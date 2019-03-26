@@ -82,9 +82,11 @@ void sha256(){
    // for looping
    int i,t;
 
+   //
+
    // loop through message box
    for (i = 0; i<1; i++){
-
+   // while(nextMessageBlock())
       
 
       // From page 22, W[t] = M[t] for 0 <= t <= 15
@@ -171,7 +173,7 @@ union msgblock {
 
 enum status {READ, PAD0, PAD1, FINISH};
 
-int main(int args, char *argv[]){
+int nextMessageBlock(){
 
    union msgblock M;
 
@@ -183,6 +185,8 @@ int main(int args, char *argv[]){
    FILE* f;
 
    f = fopen(argv[1], "r");
+
+   // do error checking somewhere here
    
    while (S == READ){
       nobytes = fread(M.e,1,64,f);
