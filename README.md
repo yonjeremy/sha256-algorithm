@@ -6,6 +6,14 @@ The algorithm can be split into two stages: message padding and the hash computa
 
 This report will describe the SHA-256 program that is able to compute the final hash value of a text file or a string input, its installation method and steps, and how to run the program.
 
+## How I wrote the program
+1. When the project was given to use, I started off with watching the videos about the SHA algorithm and concept behind SHA256. These videos were posted by Dr Ian McLoughlin, to be used as guides in the development of this software.[4]
+2. Next, I started off by programming the Hash computation side of things, first by setting up the bit wise operations, and then the manipulation of the bits.
+3. I then programmed the padding that will be used to add zeroes to the remaining bytes of the last message blocks
+4. Lastly, I combined both programs, and tidied up the code by displaying menu options and setting up different methods of inputs (file input or string input).
+5. I documented all the steps and processes and included them in this report.
+
+
 ## Prerequisites
 1. GCC
     - on Unix/Linux from here https://gcc.gnu.org/install/
@@ -59,11 +67,22 @@ gcc -o sha256 .\sha.c
 
 2. Preprocessing and Padding
 - The program has to process and pad the input in a way which is according to the standards specified in the SHA official document [1]. This involves padding the end of the message blocks with zero and other info.
-- When the hash computation (explained below) requests a message block, the preprocessor will loop over the file input and breakdown the file into 64 byte segments. From here, there are different scenarios that can take place. The first
+- When the hash computation (explained below) requests a message block, the preprocessor will loop over the file input and breakdown the file into 64 byte segments. From here, there are different scenarios that can take place. 
+- The first is that the file will have more than 64 bytes left to be read, and the sha256() function will call the next message block. 
+- The next scenario would be that the message block would have less than 56 bytes. This will pad the remaining bytes with zeroes. 
+- The 3rd scenario would be the message block would have between 56 and 64 bytes. This will pad the remaining bytes with zeroes and flag it with PAD0. PAD0 is a flag that will tell the while loop to create the next message block that is padded only with zeroes. 
+- Lastly, the fourth scenario is when the message block contains exactly 64 bytes. This will flag the it with PAD1, which has the same effect as PAD0, to set the next message blocks to be filled with zeroes, but change the first byte to a 1.
 
+3. Hash Computation
+- The sha256() function handles the actual computation of the final hash value, or the message digest. It starts with the defining constants, for example K numbers which are the first 64 prime numbers in Hex, and H values which are 8 initial hex values. 
+- A while loop will then go through every 64 byte message block and update the H values by rotating and moving their bits, using vaious other functions.
+- The rotr() and shr() function is the rotate right and shift right function, which will change the position of the bytes.
+- SIG0, SIG1,sig0,sig1, ch and maj functions are used alongside the K values to update the H value.
+- The output are all the H values, which is the message digest.
 
-
-how your program works, and how you wrote it
+## Known Faults
+1. Big vs Little Endian
+- The SHA documentation specifies that the software is to be coded in Big endian. On most intel 64 bit and 32 bit machines, however, work in little endians[2]. This means that the program does not work correctly. For test case "abc", the correct big endian result should be "ba7816bf 8f01cfea 414140de 5dae2223 b00361a3 96177a9c b410ff61 f20015ad". I have attempted to change the message blocks to big endian but this proved to be harder than expected. 
 
 ## Sources
 1. FEDERAL INFORMATION PROCESSING STANDARDS PUBLICATION
@@ -73,3 +92,10 @@ Information Technology Laboratory
 National Institute of Standards and Technology
 Gaithersburg, MD 20899-8900
 March 2012 
+
+2. The types of endians in different systems http://www.yolinux.com/TUTORIALS/Endian-Byte-Order.html
+
+3. The test vectors used from this website https://www.di-mgt.com.au/sha_testvectors.html
+
+4. The videos used for guides by Dr Ian McLoughlin
+https://web.microsoftstream.com/video/db7c03be-5902-4575-9629-34d176ff1366?referrer=https://learnonline.gmit.ie/course/view.php?id=138
