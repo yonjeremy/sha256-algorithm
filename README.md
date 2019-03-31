@@ -50,7 +50,7 @@ gcc -o sha256 .\sha.c
 1. Files test cases
 
 | Test File  | Expected Result |
-
+| ------------- | ------------- |
 | AliceInWonderland.txt  | ee896783 5362d4b3 f1b4f1dc 16b4a64f a34fa257 364a7225 a3cb77e7 bc80297b  |
 | abc.txt  | c03d846f 81741707 355ee5d7 f345e523 1942e2f5 f7698700 6145502c a1d10630   |
 
