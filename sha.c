@@ -74,7 +74,7 @@ int main(int argc, char *argv[]){
             fclose(msgf);
          }
          else{
-            printf("File does not exist, please enter valid file name");
+            printf("File does not exist, please enter valid file name.\n");
          }
 
       }
@@ -222,7 +222,7 @@ void sha256(FILE *msgf){
       H[6] = g + H[6]; H[7] = h + H[7];
 
    }
-   printf("%08x %08x %08x %08x %08x %08x %08x %08.x ", H[0],H[1],H[2],H[3],H[4],H[5],H[6],H[7]);
+   printf("%08x %08x %08x %08x %08x %08x %08x %08x\n", H[0],H[1],H[2],H[3],H[4],H[5],H[6],H[7]);
 }
 
 uint32_t rotr(uint32_t n, uint32_t x){
@@ -290,8 +290,6 @@ int nextMessageBlock(FILE *msgf, union msgblock *M, enum status *S, uint64_t *no
 
    // if we get down here, we havent finished reading the file (S==READ)
    nobytes = fread(M->e,1,64,msgf);
-
-   printf("%x",nobytes);
    
    // keep track of number of bytes we've read
    *nobits = *nobits + (nobytes * 8);
