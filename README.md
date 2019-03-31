@@ -50,14 +50,15 @@ gcc -o sha256 .\sha.c
 1. Files test cases
 
 | Test File             | Expected Result |
-| AliceInWonderland.txt | ee896783 5362d4b3 f1b4f1dc 16b4a64f a34fa257 364a7225 a3cb77e7 bc80297b |
-| abc.txt               | c03d846f 81741707 355ee5d7 f345e523 1942e2f5 f7698700 6145502c a1d10630 |
+
+AliceInWonderland.txt : ee896783 5362d4b3 f1b4f1dc 16b4a64f a34fa257 364a7225 a3cb77e7 bc80297b 
+abc.txt               : c03d846f 81741707 355ee5d7 f345e523 1942e2f5 f7698700 6145502c a1d10630 
 
 2. String test cases
 
 | Test String           | Expected Result |
-| "abc"                 | c03d846f 81741707 355ee5d7 f345e523 1942e2f5 f7698700 6145502c a1d10630 |
-| "123"                 | c17d367d 4166b0fd e90b4845 bd881ac5 6e8ace09 272275dc 0a8d1af9 f7681262 |
+"abc"                 : c03d846f 81741707 355ee5d7 f345e523 1942e2f5 f7698700 6145502c a1d10630 |
+"123"                 : c17d367d 4166b0fd e90b4845 bd881ac5 6e8ace09 272275dc 0a8d1af9 f7681262 |
 
 ## Program breakdown
 1. File or string parsing
