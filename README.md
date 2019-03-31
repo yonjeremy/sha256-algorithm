@@ -38,9 +38,32 @@ gcc -o sha256 .\sha.c
 4. Exit program
 - If option "3" is selected, the user will exit the program.
 
+## Testing the program
+1. Files test cases
+
+| Test File             | Expected Result |
+| AliceInWonderland.txt | ee896783 5362d4b3 f1b4f1dc 16b4a64f a34fa257 364a7225 a3cb77e7 bc80297b |
+| abc.txt               | c03d846f 81741707 355ee5d7 f345e523 1942e2f5 f7698700 6145502c a1d10630 |
+
+2. String test cases
+
+| Test String           | Expected Result |
+| "abc"                 | c03d846f 81741707 355ee5d7 f345e523 1942e2f5 f7698700 6145502c a1d10630 |
+| "123"                 | c17d367d 4166b0fd e90b4845 bd881ac5 6e8ace09 272275dc 0a8d1af9 f7681262 |
+
 ## Program breakdown
+1. File or string parsing
+- The program starts of with a main() function with tells the executable which function to execute first. The main function handles aribitrary menu display instructions and scanf functions to get user inputs from the console.
+- This section is responsible for parsing the file or string inputs into the pre-processor correctly. For the file parser, the program will check if the file that is to be parsed exists and is valid. This is done by a file_exist() function that checks the buffer of the file. For the string parser, the program will create or overwrite a file called temp.txt that temporarily holds the string that is to be parsed in, and then sends this file to the preprocessor to be handled later
+- After the output hash value has been displayed, the menu will be shown again so that the user can run a different file input or string input until the user exits the program.
+
+2. Preprocessing and Padding
+- The program has to process and pad the input in a way which is according to the standards specified in the SHA official document [1]. This involves padding the end of the message blocks with zero and other info.
+- When the hash computation (explained below) requests a message block, the preprocessor will loop over the file input and breakdown the file into 64 byte segments. From here, there are different scenarios that can take place. The first
 
 
+
+how your program works, and how you wrote it
 
 ## Sources
 1. FEDERAL INFORMATION PROCESSING STANDARDS PUBLICATION
