@@ -7,7 +7,7 @@
 #include <stdio.h>
 // For using fixed bit length integers.
 #include <stdint.h>
-
+// Stat struct used to check if file is valid and exists
 #include <sys/stat.h>
 
 // represents a message block
@@ -44,25 +44,32 @@ void sha256(FILE *msgf);
 // retrieves the next message block
 int nextMessageBlock(FILE *f, union msgblock *M, enum status *S, uint64_t *nobits);
 
+// for displaying main menu
 void displayMenu();
 
+// to check if file exists
 int file_exist (char *filename);
 
 // start
 int main(int argc, char *argv[]){
 
-
+   // dislay the main menu and get user choice
    displayMenu();
    int choice;
    scanf("%d", &choice);
 
+   // keep looping until user exists program
    while (choice != 3){
+      // if the user wants to parse a file
       if (choice == 1){
 
+         // prompt user to enter file name
          printf("Please enter file name: ");
          FILE* msgf;
          char fileName[20];
          scanf("%s", &fileName);
+
+         // check if the file is valid and exists
          if (file_exist (fileName))
          {
             msgf = fopen(fileName, "r");
@@ -78,17 +85,20 @@ int main(int argc, char *argv[]){
          }
 
       }
+      // if the user wants to parse a string in the command line
       else if (choice == 2){
 
+         // prompt user to enter string
          printf("Please enter text: ");
          FILE* msgf;
          char text[100];
          scanf("%s", &text);
 
          FILE *fp;
-         /* open the file for writing*/
-         fp = fopen ("temp.txt","ab+");
+         /* open a temporary file for writing*/
+         fp = fopen ("temp.txt","w+");
       
+         // print the contents of string to temporary file
          fprintf (fp, text);
  
          /* close the file*/  
@@ -105,18 +115,15 @@ int main(int argc, char *argv[]){
          printf("Error: option not found. Try again.\n");
       }
 
+      // display menu and get user choice
       displayMenu();
       scanf("%d", &choice); 
-
-      
-      if (choice == 3){
-         printf("goodbye\n");
-      }
    }
 
-
+   printf("goodbye\n");
    return 0;
 }
+
 // think about passing the final hash value back here
 void sha256(FILE *msgf){
 
@@ -175,22 +182,6 @@ void sha256(FILE *msgf){
       for(t=0; t<16; t++){
          W[t] = M.t[t];
       }
-      // W[12] = M.t[0];
-      // W[13] = M.t[1];
-      // W[14] = M.t[2];
-      // W[15] = M.t[3];
-      // W[8] = M.t[4];
-      // W[9] = M.t[5];
-      // W[10] = M.t[6];
-      // W[11] = M.t[7];
-      // W[4] = M.t[8];
-      // W[5] = M.t[9];
-      // W[6] = M.t[10];
-      // W[7] = M.t[11];
-      // W[0] = M.t[12];
-      // W[1] = M.t[13];
-      // W[2] = M.t[14];
-      // W[3] = M.t[15];
 
       // From page 22, W[t] = ...
       for(t=16; t<64; t++){
@@ -328,6 +319,7 @@ int nextMessageBlock(FILE *msgf, union msgblock *M, enum status *S, uint64_t *no
    return 1;
 }
 
+// display the main menu
 void displayMenu(){
    printf("Main Menu:\n");
    printf("Select 1 to get SHA-256 checksum of a FILE input.\n");
@@ -335,8 +327,9 @@ void displayMenu(){
    printf("Select 3 to exit program.\n");
 }
 
+// to check if the file exists and is valid
 int file_exist (char *filename)
 {
-  struct stat   buffer;   
+  struct stat buffer;   
   return (stat (filename, &buffer) == 0);
 }
