@@ -8,6 +8,8 @@
 // For using fixed bit length integers.
 #include <stdint.h>
 
+#include <sys/stat.h>
+
 // represents a message block
 union msgblock {
    uint8_t e[64];
@@ -42,18 +44,76 @@ void sha256(FILE *msgf);
 // retrieves the next message block
 int nextMessageBlock(FILE *f, union msgblock *M, enum status *S, uint64_t *nobits);
 
+void displayMenu();
+
+int file_exist (char *filename);
+
 // start
 int main(int argc, char *argv[]){
 
-   FILE* msgf;
-   msgf = fopen(argv[1], "r");
-   // should do error checking here
 
-   // run the secure hash algorithm on the file
-   sha256(msgf);
+   displayMenu();
+   int choice;
+   scanf("%d", &choice);
 
-   // close the file
-   fclose(msgf);
+   while (choice != 3){
+      if (choice == 1){
+
+         printf("Please enter file name: ");
+         FILE* msgf;
+         char fileName[20];
+         scanf("%s", &fileName);
+         if (file_exist (fileName))
+         {
+            msgf = fopen(fileName, "r");
+
+            // run the secure hash algorithm on the file
+            sha256(msgf);
+
+            // close the file
+            fclose(msgf);
+         }
+         else{
+            printf("File does not exist, please enter valid file name");
+         }
+
+      }
+      else if (choice == 2){
+
+         printf("Please enter text: ");
+         FILE* msgf;
+         char text[100];
+         scanf("%s", &text);
+
+         FILE *fp;
+         /* open the file for writing*/
+         fp = fopen ("temp.txt","ab+");
+      
+         fprintf (fp, text);
+ 
+         /* close the file*/  
+         fclose (fp);
+         msgf = fopen("temp.txt", "r");
+
+         // run the secure hash algorithm on the file
+         sha256(msgf);
+
+         // close the file
+         fclose(msgf);
+      }
+      else{
+         printf("Error: option not found. Try again.\n");
+      }
+
+      displayMenu();
+      scanf("%d", &choice); 
+
+      
+      if (choice == 3){
+         printf("goodbye\n");
+      }
+   }
+
 
    return 0;
 }
@@ -115,6 +175,22 @@ void sha256(FILE *msgf){
       for(t=0; t<16; t++){
          W[t] = M.t[t];
       }
+      // W[12] = M.t[0];
+      // W[13] = M.t[1];
+      // W[14] = M.t[2];
+      // W[15] = M.t[3];
+      // W[8] = M.t[4];
+      // W[9] = M.t[5];
+      // W[10] = M.t[6];
+      // W[11] = M.t[7];
+      // W[4] = M.t[8];
+      // W[5] = M.t[9];
+      // W[6] = M.t[10];
+      // W[7] = M.t[11];
+      // W[0] = M.t[12];
+      // W[1] = M.t[13];
+      // W[2] = M.t[14];
+      // W[3] = M.t[15];
 
       // From page 22, W[t] = ...
       for(t=16; t<64; t++){
@@ -214,6 +290,8 @@ int nextMessageBlock(FILE *msgf, union msgblock *M, enum status *S, uint64_t *no
 
    // if we get down here, we havent finished reading the file (S==READ)
    nobytes = fread(M->e,1,64,msgf);
+
+   printf("%x",nobytes);
    
    // keep track of number of bytes we've read
    *nobits = *nobits + (nobytes * 8);
@@ -250,4 +328,17 @@ int nextMessageBlock(FILE *msgf, union msgblock *M, enum status *S, uint64_t *no
    
    // if we get this far, then return 1 so that this function is called again
    return 1;
+}
+
+void displayMenu(){
+   printf("Main Menu:\n");
+   printf("Select 1 to get SHA-256 checksum of a FILE input.\n");
+   printf("Select 2 to get SHA-256 checksum of a STRING input.\n");
+   printf("Select 3 to exit program.\n");
+}
+
+int file_exist (char *filename)
+{
+  struct stat   buffer;   
+  return (stat (filename, &buffer) == 0);
 }
