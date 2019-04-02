@@ -85,6 +85,10 @@ gcc -o sha256 .\sha.c
 - SIG0, SIG1,sig0,sig1, ch and maj functions are used alongside the K values to update the H value.
 - The output are all the H values, which is the message digest.
 
+4. File Exists and is Valid
+- When the program reads in a file, the function file_exists() will be used to check if the file that has been stated resides in the specified location. 
+- The function takes in the file address and calls a stat() function, which takes in the path and buffer as parameters. The stat() function obtains informtation about the file and writes it out to the buf. If it is successful, it returns a 0, if unsuccessful, it returns a -1.
+
 ## Known Faults
 1. Big vs Little Endian
 - The SHA documentation specifies that the software is to be coded in Big endian. On most intel 64 bit and 32 bit machines, however, work in little endians[2]. This means that the program does not work correctly. For test case "abc", the correct big endian result should be "ba7816bf 8f01cfea 414140de 5dae2223 b00361a3 96177a9c b410ff61 f20015ad". I have attempted to change the message blocks to big endian but this proved to be harder than expected. 
@@ -104,3 +108,6 @@ March 2012
 
 4. The videos used for guides by Dr Ian McLoughlin
 https://web.microsoftstream.com/video/db7c03be-5902-4575-9629-34d176ff1366?referrer=https://learnonline.gmit.ie/course/view.php?id=138
+
+5 How to check if file exists
+https://stackoverflow.com/questions/230062/whats-the-best-way-to-check-if-a-file-exists-in-c
